@@ -126,33 +126,27 @@ class SinglyLink(object):
 
     def combine_link(self, singly_link):
         """合并两个有序列表"""
-        pre_h1 = self.guard
         h1 = self.guard.next
         h2 = singly_link.guard.next
+        self.guard = SinglyLinkNode(None)
+        current = self.guard
+
         while h1 or h2:
             if h1 is None:
-                pre_h1.next = h2
+                current.next = h2
                 break
-            elif h2 is None:
+
+            if h2 is None:
+                current.next = h1
                 break
+
+            if h1.data >= h2.data:
+                current.next = h2
+                h2 = h2.next
             else:
-                if pre_h1.data is None:
-                    if h2.data < h1.data:
-                        h2_next = h2.next
-                        self.insert_node_after_node(pre_h1, h2)
-                        pre_h1 = pre_h1.next
-                        h2 = h2_next
-                    else:
-                        pre_h1 = h1
-                        h1 = h1.next
-                elif pre_h1.data <= h2.data < h1.data:
-                    h2_next = h2.next
-                    self.insert_node_after_node(pre_h1, h2)
-                    pre_h1 = pre_h1.next
-                    h2 = h2_next
-                else:
-                    pre_h1 = h1
-                    h1 = h1.next
+                current.next = h1
+                h1 = h1.next
+            current = current.next
 
     def find_last_n_node(self, n):
         """查找倒数第n个节点"""
@@ -298,13 +292,13 @@ if __name__ == '__main__':
     # -------------------------- 合并两个有序链表 ---------------
     print('\n合并两个有序链表')
     sl_1 = SinglyLink()
-    for i in [1, 7]:
+    for i in [0, 4]:
         sl_1.insert_value_to_tail(i)
     print("链表1：")
     sl_1.print_all()
 
     sl_2 = SinglyLink()
-    for i in [1, 11]:
+    for i in [1, 12]:
         sl_2.insert_value_to_tail(i)
     print("链表2：")
     sl_2.print_all()
